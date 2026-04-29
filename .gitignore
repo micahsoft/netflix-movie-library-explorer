@@ -1,0 +1,22 @@
+node_modules/
+dist/
+coverage/
+.pnpm-store/
+package-lock.json
+
+# Environment — never commit secrets
+.env
+*.env
+
+# Google OAuth credentials — never commit
+packages/backend/credentials.json
+packages/backend/token.json
+
+# Generated files
+packages/backend/schema.gql
+
+# OS / editor
+.DS_Store
+*.js.map
+.vscode/
+.idea/
