@@ -94,6 +94,7 @@ body {
 }
 .genre-name { color: #e5e5e5; }
 .genre-count { color: #888; font-variant-numeric: tabular-nums; }
+.quarantine-reason { font-family: monospace; font-size: 0.85rem; color: #e5a550; }
 
 /* ─── Movie Card ────────────────────────────────────────────────── */
 .movie-card {
