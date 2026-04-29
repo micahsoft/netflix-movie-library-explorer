@@ -65,3 +65,15 @@ pnpm dev
 
 The backend starts at **http://localhost:3000/graphql** (GraphQL Playground available).  
 The frontend starts at **http://localhost:5173**.
+
+> **Note:** Port 3001 is reserved for the OAuth callback server and must not be in use when starting the backend.
+
+## Running Without Google Credentials (Demo Mode)
+
+To run without Drive credentials, set `DEMO_MODE=true` in `packages/backend/.env`. The backend will serve a built-in seed dataset instead of crawling Drive.
+
+## Running Tests
+
+```bash
+pnpm test
+```

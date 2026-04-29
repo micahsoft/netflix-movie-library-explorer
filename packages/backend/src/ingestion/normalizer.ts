@@ -1,5 +1,7 @@
 import { Movie } from '@movie-explorer/types'
 
+// 'fetch_error' is set by IngestionService (network failure), not by normalize().
+// All other reasons are set by normalize() (malformed content).
 export type QuarantineReason =
   | 'missing_title'
   | 'missing_rating'

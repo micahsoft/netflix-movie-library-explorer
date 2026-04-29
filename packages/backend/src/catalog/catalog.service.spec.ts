@@ -130,6 +130,33 @@ describe('CatalogService', () => {
     })
   })
 
+  describe('reload', () => {
+    it('replaces catalog with new movies', async () => {
+      const svc = makeService()
+      svc.populate([movie({ id: '1', title: 'Old Movie' })])
+      mockIngestion.ingest.mockResolvedValueOnce({
+        movies: [movie({ id: '2', title: 'New Movie', rating: 9 })],
+        quarantinedCount: 0,
+      })
+      await svc.reload()
+      expect(svc.getStats().totalCount).toBe(1)
+      expect(svc.search('New Movie')).toHaveLength(1)
+      expect(svc.search('Old Movie')).toHaveLength(0)
+    })
+
+    it('returns updated stats after reload', async () => {
+      const svc = makeService()
+      svc.populate([movie({ id: '1', rating: 5 })])
+      mockIngestion.ingest.mockResolvedValueOnce({
+        movies: [movie({ id: '2', rating: 9 }), movie({ id: '3', rating: 7 })],
+        quarantinedCount: 0,
+      })
+      const stats = await svc.reload()
+      expect(stats.totalCount).toBe(2)
+      expect(stats.averageRating).toBe(8)
+    })
+  })
+
   describe('filter', () => {
     it('filters by genre', () => {
       const svc = makeService()
