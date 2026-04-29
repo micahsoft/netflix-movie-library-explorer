@@ -6,7 +6,7 @@ export enum MovieSource {
 }
 registerEnumType(MovieSource, { name: 'MovieSource' })
 
-@ObjectType()
+@ObjectType('Movie')
 export class MovieType {
   @Field(() => ID)
   id: string

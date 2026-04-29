@@ -33,6 +33,7 @@ export class CatalogService implements OnApplicationBootstrap {
     this.genreCounts.clear()
     this.ratingSum = 0
     this.ratedCount = 0
+    this.quarantineLog.clear()
 
     for (const movie of movies) {
       this.indexMovie(movie)
@@ -45,7 +46,7 @@ export class CatalogService implements OnApplicationBootstrap {
     this.logger.log(`Catalog ready — ${this.store.size} movies indexed`)
   }
 
-  private indexMovie(movie: Movie) {
+  private indexMovieData(movie: Movie) {
     const record = toRecord(movie)
     this.store.set(movie.id, record)
 
@@ -61,7 +62,10 @@ export class CatalogService implements OnApplicationBootstrap {
       ids.push(movie.id)
       this.byYear.set(movie.year, ids)
     }
+  }
 
+  private indexMovie(movie: Movie) {
+    this.indexMovieData(movie)
     this.byRatingIds.push(movie.id)
   }
 
@@ -72,23 +76,9 @@ export class CatalogService implements OnApplicationBootstrap {
       source: 'manual',
     }
 
-    const record = toRecord(movie)
-    this.store.set(movie.id, record)
+    this.indexMovieData(movie)
 
-    this.ratingSum += movie.rating
-    this.ratedCount++
-
-    for (const genre of record.genreSet) {
-      this.genreCounts.set(genre, (this.genreCounts.get(genre) ?? 0) + 1)
-    }
-
-    if (movie.year != null) {
-      const ids = this.byYear.get(movie.year) ?? []
-      ids.push(movie.id)
-      this.byYear.set(movie.year, ids)
-    }
-
-    // Insert into sorted array at the correct position — O(log n) search, O(n) insert
+    // Insert into sorted array at the correct position — O(n) scan + O(n) splice
     const insertAt = this.byRatingIds.findIndex(
       (id) => this.store.get(id)!.rating < movie.rating,
     )
@@ -124,8 +114,8 @@ export class CatalogService implements OnApplicationBootstrap {
         if (f.q && !r.title.toLowerCase().includes(f.q.toLowerCase())) return false
         if (f.genre && !r.genreSet.has(f.genre)) return false
         if (f.minRating != null && r.rating < f.minRating) return false
-        return !(f.year != null && r.year !== f.year);
-
+        if (f.year != null && r.year !== f.year) return false
+        return true
       })
       .map(fromRecord)
   }

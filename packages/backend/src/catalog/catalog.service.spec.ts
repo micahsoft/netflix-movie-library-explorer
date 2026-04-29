@@ -3,7 +3,7 @@ import { Movie } from '@movie-explorer/types'
 
 // Minimal stubs — we test CatalogService logic in isolation
 const mockIngestion = { ingest: jest.fn().mockResolvedValue({ movies: [], quarantinedCount: 0 }) }
-const mockQuarantine = { getSummary: jest.fn().mockReturnValue({ total: 0, byReason: [] }) }
+const mockQuarantine = { getSummary: jest.fn().mockReturnValue({ total: 0, byReason: [] }), clear: jest.fn() }
 
 function makeService(): CatalogService {
   return new CatalogService(mockIngestion as any, mockQuarantine as any)
@@ -74,8 +74,8 @@ describe('CatalogService', () => {
       const svc = makeService()
       svc.populate([movie({ id: '1', year: null }), movie({ id: '2', year: 2020 })])
       const stats = svc.getStats()
-      const nullYear = stats.byYear.find((y) => y.year === null)
-      expect(nullYear).toBeUndefined()
+      expect(stats.byYear).toHaveLength(1)
+      expect(stats.byYear[0].year).toBe(2020)
     })
   })
 

@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { MovieType } from './movie.type'
 
-@ObjectType()
+@ObjectType('MovieConnection')
 export class MovieConnectionType {
   @Field(() => [MovieType])
   items: MovieType[]

@@ -105,7 +105,7 @@ type Query {
   ): MovieConnection!
 
   # Get a single movie by ID
-  movie(id: String!): Movie
+  movie(id: ID!): Movie
 
   # Aggregate stats (top genres, average rating, total count, by year)
   stats: CatalogStats!
@@ -124,7 +124,8 @@ type Mutation {
   # Add a movie to the in-memory catalog (not to Drive)
   addMovie(input: AddMovieInput!): Movie!
 
-  # Trigger a manual re-ingestion from Drive
+  # Re-ingest from Drive and repopulate the catalog
+  # Clears the quarantine log before re-ingestion
   reloadCatalog: CatalogStats!
 }
 ```

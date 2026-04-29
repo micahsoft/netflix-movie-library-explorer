@@ -17,6 +17,10 @@ export class QuarantineLog {
     this.entries.push(entry)
   }
 
+  clear() {
+    this.entries = []
+  }
+
   getAll(): QuarantinedFile[] {
     return [...this.entries]
   }

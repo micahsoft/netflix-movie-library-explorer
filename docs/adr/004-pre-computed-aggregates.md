@@ -44,7 +44,7 @@ The `CatalogStats` structure maintained:
 - `byYear: Map<number, Movie[]>`
 - `byRating: Movie[]` (pre-sorted descending)
 
-On `addMovie`, each of these is updated incrementally in O(1) or O(log n) time.
+On `addMovie`, most structures are updated in O(1). Maintaining `byRating` in sorted order requires an O(n) scan and splice — acceptable at this scale, and worth noting for a production evolution.
 
 ## Trade-offs
 

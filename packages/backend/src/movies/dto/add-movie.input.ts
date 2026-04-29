@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator'
 
-@InputType()
+@InputType('AddMovieInput')
 export class AddMovieInput {
   @Field()
   @IsNotEmpty()

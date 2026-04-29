@@ -1,7 +1,7 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql'
 import { MovieType } from './movie.type'
 
-@ObjectType()
+@ObjectType('GenreCount')
 export class GenreCountType {
   @Field()
   genre: string
@@ -10,7 +10,7 @@ export class GenreCountType {
   count: number
 }
 
-@ObjectType()
+@ObjectType('YearGroup')
 export class YearGroupType {
   @Field(() => Int)
   year: number
@@ -22,7 +22,7 @@ export class YearGroupType {
   movies: MovieType[]
 }
 
-@ObjectType()
+@ObjectType('CatalogStats')
 export class CatalogStatsType {
   @Field(() => Int)
   totalCount: number
@@ -37,7 +37,7 @@ export class CatalogStatsType {
   byYear: YearGroupType[]
 }
 
-@ObjectType()
+@ObjectType('QuarantineReasonCount')
 export class QuarantineReasonCountType {
   @Field()
   reason: string
@@ -46,7 +46,7 @@ export class QuarantineReasonCountType {
   count: number
 }
 
-@ObjectType()
+@ObjectType('QuarantineSummary')
 export class QuarantineSummaryType {
   @Field(() => Int)
   total: number

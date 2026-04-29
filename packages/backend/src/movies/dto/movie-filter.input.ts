@@ -1,7 +1,7 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql'
 import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
 
-@InputType()
+@InputType('MovieFilter')
 export class MovieFilterInput {
   @Field({ nullable: true })
   @IsOptional()
