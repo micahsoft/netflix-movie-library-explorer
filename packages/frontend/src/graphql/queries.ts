@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const MOVIE_FIELDS = gql`
-  fragment MovieFields on MovieType {
+  fragment MovieFields on Movie {
     id
     title
     rating
@@ -43,7 +43,7 @@ export const GET_TOP_RATED = gql`
 `
 
 export const SEARCH_MOVIES = gql`
-  query SearchMovies($filter: MovieFilterInput, $limit: Int, $offset: Int) {
+  query SearchMovies($filter: MovieFilter, $limit: Int, $offset: Int) {
     movies(filter: $filter, limit: $limit, offset: $offset) {
       items {
         ...MovieFields

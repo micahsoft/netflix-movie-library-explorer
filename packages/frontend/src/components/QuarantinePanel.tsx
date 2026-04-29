@@ -1,6 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_QUARANTINE_SUMMARY } from '../graphql/queries'
+import { QuarantineReasonCount } from '@movie-explorer/types'
 
 export function QuarantinePanel() {
   const { data, loading, error } = useQuery(GET_QUARANTINE_SUMMARY)
@@ -31,7 +32,7 @@ export function QuarantinePanel() {
         <>
           <h3>Breakdown by Reason</h3>
           <ul className="genre-list">
-            {byReason.map((r: { reason: string; count: number }) => (
+            {byReason.map((r: QuarantineReasonCount) => (
               <li key={r.reason} className="genre-item">
                 <span className="genre-name quarantine-reason">{r.reason}</span>
                 <span className="genre-count">{r.count}</span>

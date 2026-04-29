@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { SearchBar } from './components/SearchBar'
 import { StatsPanel } from './components/StatsPanel'
 import { TopRated } from './components/TopRated'
 import { MoviesByYear } from './components/MoviesByYear'
@@ -19,6 +20,7 @@ const TABS: { id: Tab; label: string; audience: 'all' | 'technical' }[] = [
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('overview')
+  const [searching, setSearching] = useState(false)
 
   return (
     <div className="app">
@@ -43,7 +45,7 @@ export default function App() {
       </nav>
 
       <main className="main-content">
-        {tab === 'overview' && <StatsPanel />}
+        {tab === 'overview' && <><SearchBar onQueryChange={setSearching} />{!searching && <StatsPanel />}</>}
         {tab === 'top-rated' && <TopRated />}
         {tab === 'by-year' && <MoviesByYear />}
         {tab === 'add' && <AddMovieForm />}

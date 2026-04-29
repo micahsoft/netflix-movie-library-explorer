@@ -4,12 +4,17 @@ import { SEARCH_MOVIES } from '../graphql/queries'
 import { MovieCard } from './MovieCard'
 import { Movie } from '@movie-explorer/types'
 
-export function SearchBar() {
+interface SearchBarProps {
+  onQueryChange?: (hasQuery: boolean) => void
+}
+
+export function SearchBar({ onQueryChange }: SearchBarProps) {
   const [query, setQuery] = useState('')
-  const [search, { data, loading }] = useLazyQuery(SEARCH_MOVIES)
+  const [search, { data, loading, error }] = useLazyQuery(SEARCH_MOVIES)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
+    onQueryChange?.(query.trim().length > 0)
     if (debounceRef.current) clearTimeout(debounceRef.current)
     if (!query.trim()) return
     debounceRef.current = setTimeout(() => {
@@ -31,6 +36,7 @@ export function SearchBar() {
         onChange={(e) => setQuery(e.target.value)}
       />
       {loading && <div className="loading-text">Searching…</div>}
+      {error && <p className="error-msg">Search failed: {error.message}</p>}
       {query && data && (
         <div className="search-results">
           <p className="results-count">{data.movies.total} results</p>

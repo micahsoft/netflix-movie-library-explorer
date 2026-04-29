@@ -67,6 +67,7 @@ body {
   padding: 1.5rem;
   border: 1px solid #2a2a2a;
 }
+.panel + .panel { margin-top: 1rem; }
 .panel h2 { font-size: 1.3rem; margin-bottom: 1rem; color: #fff; }
 .panel h3 { font-size: 1rem; margin: 1rem 0 0.5rem; color: #ccc; }
 .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }

@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_STATS } from '../graphql/queries'
-import { Movie } from '@movie-explorer/types'
+import { YearGroup } from '@movie-explorer/types'
 
 export function MoviesByYear() {
-  const { data, loading } = useQuery(GET_STATS)
+  const { data, loading, error } = useQuery(GET_STATS)
   const [expanded, setExpanded] = useState<number | null>(null)
 
   if (loading) return <div className="panel loading">Loading…</div>
+  if (error) return <div className="panel error">Failed to load.</div>
 
   const { byYear } = data.stats
 
@@ -15,7 +16,7 @@ export function MoviesByYear() {
     <div className="panel">
       <h2>Movies by Year</h2>
       <div className="year-list">
-        {byYear.map((group: { year: number; count: number; movies: Movie[] }) => (
+        {byYear.map((group: YearGroup) => (
           <div key={group.year} className="year-group">
             <button
               className="year-header"
