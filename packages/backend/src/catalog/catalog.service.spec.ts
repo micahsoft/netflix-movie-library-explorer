@@ -1,5 +1,5 @@
 import { CatalogService } from './catalog.service'
-import { Movie } from '@movie-explorer/types'
+import { Movie, MovieSource } from '@movie-explorer/types'
 
 // Minimal stubs — we test CatalogService logic in isolation
 const mockIngestion = { ingest: jest.fn().mockResolvedValue({ movies: [], quarantinedCount: 0 }) }
@@ -17,7 +17,7 @@ function movie(overrides: Partial<Movie> = {}): Movie {
     genres: ['Drama'],
     year: 2020,
     description: null,
-    source: 'drive',
+    source: MovieSource.DRIVE,
     ...overrides,
   }
 }
@@ -83,14 +83,14 @@ describe('CatalogService', () => {
     it('increments totalCount', () => {
       const svc = makeService()
       svc.populate([])
-      svc.add({ title: 'New', rating: 8, genres: [], year: null, description: null })
+      svc.add({ title: 'New', rating: 8, genres: [], year: undefined, description: undefined })
       expect(svc.getStats().totalCount).toBe(1)
     })
 
     it('updates averageRating', () => {
       const svc = makeService()
       svc.populate([movie({ id: '1', rating: 6 })])
-      svc.add({ title: 'New', rating: 8, genres: [], year: null, description: null })
+      svc.add({ title: 'New', rating: 8, genres: [], year: undefined, description: undefined })
       expect(svc.getStats().averageRating).toBe(7)
     })
 
@@ -101,8 +101,8 @@ describe('CatalogService', () => {
         title: 'New Best',
         rating: 10,
         genres: [],
-        year: null,
-        description: null,
+        year: undefined,
+        description: undefined,
       })
       expect(svc.getTopRated(1)[0].id).toBe(added.id)
     })
@@ -110,23 +110,23 @@ describe('CatalogService', () => {
     it('assigns manual source', () => {
       const svc = makeService()
       svc.populate([])
-      const m = svc.add({ title: 'T', rating: 7, genres: [], year: null, description: null })
-      expect(m.source).toBe('manual')
+      const m = svc.add({ title: 'T', rating: 7, genres: [], year: undefined, description: undefined })
+      expect(m.source).toBe(MovieSource.MANUAL)
     })
   })
 
-  describe('search', () => {
+  describe('query — title search', () => {
     it('finds by title substring (case-insensitive)', () => {
       const svc = makeService()
       svc.populate([movie({ id: '1', title: 'Inception' }), movie({ id: '2', title: 'Heat' })])
-      expect(svc.search('incep')).toHaveLength(1)
-      expect(svc.search('HEAT')).toHaveLength(1)
+      expect(svc.query({ q: 'incep' }).items).toHaveLength(1)
+      expect(svc.query({ q: 'HEAT' }).items).toHaveLength(1)
     })
 
-    it('returns all when query is empty', () => {
+    it('returns all when no filter is provided', () => {
       const svc = makeService()
       svc.populate([movie({ id: '1' }), movie({ id: '2' })])
-      expect(svc.search('')).toHaveLength(2)
+      expect(svc.query().total).toBe(2)
     })
   })
 
@@ -140,8 +140,8 @@ describe('CatalogService', () => {
       })
       await svc.reload()
       expect(svc.getStats().totalCount).toBe(1)
-      expect(svc.search('New Movie')).toHaveLength(1)
-      expect(svc.search('Old Movie')).toHaveLength(0)
+      expect(svc.query({ q: 'New Movie' }).items).toHaveLength(1)
+      expect(svc.query({ q: 'Old Movie' }).items).toHaveLength(0)
     })
 
     it('returns updated stats after reload', async () => {

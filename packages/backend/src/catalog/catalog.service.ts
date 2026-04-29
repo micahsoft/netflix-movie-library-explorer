@@ -1,9 +1,20 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common'
-import { randomUUID } from 'crypto'
-import { Movie, CatalogStats, MovieFilter } from '@movie-explorer/types'
+import {Injectable, Logger, OnApplicationBootstrap} from '@nestjs/common'
+import {randomUUID} from 'crypto'
+import {
+  AddMovieInput,
+  CatalogStats,
+  Movie,
+  MovieConnection,
+  MovieFilter,
+  MovieSort,
+  MovieSortField,
+  MovieSource,
+  QuarantineSummary,
+  SortDirection,
+} from '@movie-explorer/types'
 import { IngestionService } from '../ingestion/ingestion.service'
 import { QuarantineLog } from '../ingestion/quarantine-log'
-import { MovieRecord, toRecord, fromRecord } from './movie-record'
+import { fromRecord, MovieRecord, toRecord } from './movie-record'
 
 @Injectable()
 export class CatalogService implements OnApplicationBootstrap {
@@ -69,11 +80,15 @@ export class CatalogService implements OnApplicationBootstrap {
     this.byRatingIds.push(movie.id)
   }
 
-  add(input: Omit<Movie, 'id' | 'source'>): Movie {
+  add(input: AddMovieInput): Movie {
     const movie: Movie = {
-      ...input,
       id: randomUUID(),
-      source: 'manual',
+      source: MovieSource.MANUAL,
+      title: input.title,
+      rating: input.rating,
+      genres: input.genres ?? [],
+      year: input.year ?? null,
+      description: input.description ?? null,
     }
 
     this.indexMovieData(movie)
@@ -100,12 +115,23 @@ export class CatalogService implements OnApplicationBootstrap {
     return record ? fromRecord(record) : null
   }
 
-  search(q: string): Movie[] {
-    const query = q.toLowerCase().trim()
-    if (!query) return this.getAll()
-    return [...this.store.values()]
-      .filter((r) => r.title.toLowerCase().includes(query))
-      .map(fromRecord)
+  query(f?: MovieFilter, sort?: MovieSort, limit?: number, offset?: number): MovieConnection {
+    let results = f ? this.filter(f) : this.getAll()
+
+    if (sort) {
+      const dir = sort.direction === SortDirection.DESC ? -1 : 1
+      results = [...results].sort((a, b) => {
+        if (sort.field === MovieSortField.RATING) return dir * (a.rating - b.rating)
+        if (sort.field === MovieSortField.YEAR) return dir * ((a.year ?? 0) - (b.year ?? 0))
+        if (sort.field === MovieSortField.TITLE) return dir * a.title.localeCompare(b.title)
+        return 0
+      })
+    }
+
+    const total = results.length
+    const start = offset ?? 0
+    const end = limit != null ? start + limit : undefined
+    return { items: results.slice(start, end), total }
   }
 
   filter(f: MovieFilter): Movie[] {
@@ -114,8 +140,7 @@ export class CatalogService implements OnApplicationBootstrap {
         if (f.q && !r.title.toLowerCase().includes(f.q.toLowerCase())) return false
         if (f.genre && !r.genreSet.has(f.genre)) return false
         if (f.minRating != null && r.rating < f.minRating) return false
-        if (f.year != null && r.year !== f.year) return false
-        return true
+        return !(f.year != null && r.year !== f.year);
       })
       .map(fromRecord)
   }
@@ -154,7 +179,7 @@ export class CatalogService implements OnApplicationBootstrap {
     return this.getStats()
   }
 
-  getQuarantineSummary() {
+  getQuarantineSummary(): QuarantineSummary {
     return this.quarantineLog.getSummary()
   }
 }

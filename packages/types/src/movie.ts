@@ -1,3 +1,8 @@
+export enum MovieSource {
+  DRIVE = 'drive',
+  MANUAL = 'manual',
+}
+
 export interface Movie {
   id: string
   title: string
@@ -5,7 +10,7 @@ export interface Movie {
   genres: string[]
   year: number | null
   description: string | null
-  source: 'drive' | 'manual'
+  source: MovieSource
 }
 
 export interface GenreCount {
@@ -36,6 +41,22 @@ export interface MovieFilter {
   genre?: string
   minRating?: number
   year?: number
+}
+
+export enum MovieSortField {
+  RATING = 'RATING',
+  YEAR = 'YEAR',
+  TITLE = 'TITLE',
+}
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export interface MovieSort {
+  field: MovieSortField
+  direction: SortDirection
 }
 
 export interface AddMovieInput {

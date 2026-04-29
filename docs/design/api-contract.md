@@ -100,9 +100,10 @@ type Query {
   movies(
     filter: MovieFilter
     sort: MovieSortInput
-    limit: Int
-    offset: Int
+    pagination: PaginationInput
   ): MovieConnection!
+
+  # topRated also accepts pagination.limit (default 10, max 1000)
 
   # Get a single movie by ID
   movie(id: ID!): Movie

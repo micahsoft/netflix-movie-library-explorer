@@ -1,4 +1,5 @@
-import { normalize, FileContext } from './normalizer'
+import { normalize, FileContext, QuarantineReason } from './normalizer'
+import { MovieSource } from '@movie-explorer/types'
 
 const ctx: FileContext = { driveFileId: 'file-123', folderPath: ['Action', '2019'] }
 
@@ -15,7 +16,7 @@ describe('normalize', () => {
       expect(result.movie.rating).toBe(8.8)
       expect(result.movie.genres).toEqual(['Sci-Fi'])
       expect(result.movie.year).toBe(2010)
-      expect(result.movie.source).toBe('drive')
+      expect(result.movie.source).toBe(MovieSource.DRIVE)
     })
 
     it('resolves title from "name" alias', () => {
@@ -87,35 +88,35 @@ describe('normalize', () => {
       const result = normalize({ rating: 8 }, ctx)
       expect(result.ok).toBe(false)
       if (result.ok) return
-      expect(result.reason).toBe('missing_title')
+      expect(result.reason).toBe(QuarantineReason.MISSING_TITLE)
     })
 
     it('quarantines on empty title', () => {
       const result = normalize({ title: '   ', rating: 8 }, ctx)
       expect(result.ok).toBe(false)
       if (result.ok) return
-      expect(result.reason).toBe('missing_title')
+      expect(result.reason).toBe(QuarantineReason.MISSING_TITLE)
     })
 
     it('quarantines on missing rating', () => {
       const result = normalize({ title: 'T' }, ctx)
       expect(result.ok).toBe(false)
       if (result.ok) return
-      expect(result.reason).toBe('missing_rating')
+      expect(result.reason).toBe(QuarantineReason.MISSING_RATING)
     })
 
     it('quarantines on non-numeric rating string', () => {
       const result = normalize({ title: 'T', rating: 'great' }, ctx)
       expect(result.ok).toBe(false)
       if (result.ok) return
-      expect(result.reason).toBe('invalid_rating_type')
+      expect(result.reason).toBe(QuarantineReason.INVALID_RATING_TYPE)
     })
 
     it('quarantines on null input', () => {
       const result = normalize(null, ctx)
       expect(result.ok).toBe(false)
       if (result.ok) return
-      expect(result.reason).toBe('parse_error')
+      expect(result.reason).toBe(QuarantineReason.PARSE_ERROR)
     })
 
     it('quarantines on array input', () => {

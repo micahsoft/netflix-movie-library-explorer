@@ -1,4 +1,4 @@
-import { Movie } from '@movie-explorer/types'
+import { Movie, MovieSource } from '@movie-explorer/types'
 
 export const SEED_MOVIES: Movie[] = [
   {
@@ -8,7 +8,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Drama'],
     year: 1994,
     description: 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-2',
@@ -17,7 +17,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Crime', 'Drama'],
     year: 1972,
     description: 'The aging patriarch of an organized crime dynasty transfers control to his reluctant son.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-3',
@@ -26,7 +26,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Action', 'Crime', 'Drama'],
     year: 2008,
     description: 'When the menace known as the Joker wreaks havoc on Gotham City, Batman must accept one of the greatest tests of his ability to fight injustice.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-4',
@@ -35,7 +35,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Crime', 'Drama'],
     year: 1994,
     description: 'The lives of two mob hitmen, a boxer, a gangster and his wife intertwine in four tales of violence and redemption.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-5',
@@ -44,7 +44,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Biography', 'Drama', 'History'],
     year: 1993,
     description: 'In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-6',
@@ -53,7 +53,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Action', 'Adventure', 'Sci-Fi'],
     year: 2010,
     description: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-7',
@@ -62,7 +62,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Action', 'Sci-Fi'],
     year: 1999,
     description: 'When a beautiful stranger leads a computer hacker to a forbidding underworld, he discovers the shocking truth — the life he knows is the elaborate deception of an evil cyber-intelligence.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-8',
@@ -71,7 +71,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Biography', 'Crime', 'Drama'],
     year: 1990,
     description: 'The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners Jimmy Conway and Tommy DeVito.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-9',
@@ -80,7 +80,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Drama'],
     year: 1999,
     description: 'An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-10',
@@ -89,7 +89,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Adventure', 'Drama', 'Sci-Fi'],
     year: 2014,
     description: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-11',
@@ -98,7 +98,7 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Comedy', 'Drama', 'Thriller'],
     year: 2019,
     description: 'Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
   {
     id: 'seed-12',
@@ -107,6 +107,6 @@ export const SEED_MOVIES: Movie[] = [
     genres: ['Animation', 'Adventure', 'Family'],
     year: 2001,
     description: 'During her family\'s move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits.',
-    source: 'drive',
+    source: MovieSource.DRIVE,
   },
 ]

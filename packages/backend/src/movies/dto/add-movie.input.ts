@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql'
+import { AddMovieInput as IAddMovieInput } from '@movie-explorer/types'
 import {
   ArrayMinSize,
   IsArray,
@@ -11,7 +12,7 @@ import {
 } from 'class-validator'
 
 @InputType('AddMovieInput')
-export class AddMovieInput {
+export class AddMovieInput implements IAddMovieInput {
   @Field()
   @IsNotEmpty()
   @IsString()

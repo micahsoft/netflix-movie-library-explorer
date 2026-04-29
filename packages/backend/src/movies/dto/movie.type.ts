@@ -1,9 +1,8 @@
 import { Field, Float, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql'
+import { MovieSource } from '@movie-explorer/types'
 
-export enum MovieSource {
-  DRIVE = 'drive',
-  MANUAL = 'manual',
-}
+export { MovieSource }
+
 registerEnumType(MovieSource, { name: 'MovieSource' })
 
 @ObjectType('Movie')

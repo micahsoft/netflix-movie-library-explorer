@@ -2,6 +2,8 @@ import { Test } from '@nestjs/testing'
 import { IngestionService } from './ingestion.service'
 import { QuarantineLog } from './quarantine-log'
 import { DriveClient, DriveFileRef } from '../auth/drive.client'
+import { QuarantineReason } from './normalizer'
+import { MovieSource } from '@movie-explorer/types'
 
 // ---------------------------------------------------------------------------
 // Mock DriveClient
@@ -89,7 +91,7 @@ describe('IngestionService', () => {
 
     const { movies } = await svc.ingest()
 
-    expect(movies[0].source).toBe('drive')
+    expect(movies[0].source).toBe(MovieSource.DRIVE)
   })
 
   it('returns empty result when crawl finds no files', async () => {
@@ -113,7 +115,7 @@ describe('IngestionService', () => {
     expect(movies).toHaveLength(0)
     expect(quarantinedCount).toBe(1)
     expect(quarantineLog.getSummary().byReason).toEqual([
-      { reason: 'missing_title', count: 1 },
+      { reason: QuarantineReason.MISSING_TITLE, count: 1 },
     ])
   })
 
@@ -126,7 +128,7 @@ describe('IngestionService', () => {
 
     expect(movies).toHaveLength(0)
     expect(quarantinedCount).toBe(1)
-    expect(quarantineLog.getSummary().byReason[0].reason).toBe('invalid_rating_type')
+    expect(quarantineLog.getSummary().byReason[0].reason).toBe(QuarantineReason.INVALID_RATING_TYPE)
   })
 
   it('quarantines files with fetch errors and still indexes valid files', async () => {
@@ -140,7 +142,7 @@ describe('IngestionService', () => {
     expect(movies).toHaveLength(1)
     expect(movies[0].title).toBe('Good Movie')
     expect(quarantinedCount).toBe(1)
-    expect(quarantineLog.getSummary().byReason[0].reason).toBe('fetch_error')
+    expect(quarantineLog.getSummary().byReason[0].reason).toBe(QuarantineReason.FETCH_ERROR)
   })
 
   it('tracks multiple quarantine reasons independently', async () => {
@@ -158,8 +160,8 @@ describe('IngestionService', () => {
     const summary = quarantineLog.getSummary()
     expect(summary.total).toBe(2)
     const reasons = summary.byReason.map((r) => r.reason)
-    expect(reasons).toContain('missing_title')
-    expect(reasons).toContain('invalid_rating_type')
+    expect(reasons).toContain(QuarantineReason.MISSING_TITLE)
+    expect(reasons).toContain(QuarantineReason.INVALID_RATING_TYPE)
   })
 
   // ── Folder path fallbacks ─────────────────────────────────────────────────

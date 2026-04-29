@@ -60,7 +60,7 @@ export class IngestionService {
           this.quarantineLog.add({
             driveFileId: ref.fileId,
             folderPath: ref.folderPath,
-            reason: 'fetch_error' as QuarantineReason,
+            reason: QuarantineReason.FETCH_ERROR,
             rawSnippet: '',
             timestamp: new Date(),
           })

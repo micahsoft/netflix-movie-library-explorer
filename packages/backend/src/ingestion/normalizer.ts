@@ -1,13 +1,14 @@
-import { Movie } from '@movie-explorer/types'
+import { Movie, MovieSource } from '@movie-explorer/types'
 
-// 'fetch_error' is set by IngestionService (network/parse failure at fetch time).
+// FETCH_ERROR is set by IngestionService (network/parse failure at fetch time).
 // All other reasons are set by normalize() (malformed content after successful fetch).
-export type QuarantineReason =
-  | 'missing_title'
-  | 'missing_rating'
-  | 'invalid_rating_type'
-  | 'parse_error'
-  | 'fetch_error'
+export enum QuarantineReason {
+  MISSING_TITLE = 'missing_title',
+  MISSING_RATING = 'missing_rating',
+  INVALID_RATING_TYPE = 'invalid_rating_type',
+  PARSE_ERROR = 'parse_error',
+  FETCH_ERROR = 'fetch_error',
+}
 
 export type NormalizeResult =
   | { ok: true; movie: Movie }
@@ -100,17 +101,17 @@ function extractId(data: Record<string, unknown>): string | null {
 export function normalize(raw: unknown, context: FileContext): NormalizeResult {
   try {
     if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) {
-      return { ok: false, reason: 'parse_error' }
+      return { ok: false, reason: QuarantineReason.PARSE_ERROR }
     }
 
     const data = raw as Record<string, unknown>
 
     const title = extractTitle(data)
-    if (!title) return { ok: false, reason: 'missing_title' }
+    if (!title) return { ok: false, reason: QuarantineReason.MISSING_TITLE }
 
     const ratingResult = extractRating(data)
-    if (ratingResult === null) return { ok: false, reason: 'missing_rating' }
-    if (ratingResult === 'invalid') return { ok: false, reason: 'invalid_rating_type' }
+    if (ratingResult === null) return { ok: false, reason: QuarantineReason.MISSING_RATING }
+    if (ratingResult === 'invalid') return { ok: false, reason: QuarantineReason.INVALID_RATING_TYPE }
 
     return {
       ok: true,
@@ -121,10 +122,10 @@ export function normalize(raw: unknown, context: FileContext): NormalizeResult {
         genres: extractGenres(data, context.folderPath),
         year: extractYear(data, context.folderPath),
         description: extractDescription(data),
-        source: 'drive',
+        source: MovieSource.DRIVE,
       },
     }
   } catch {
-    return { ok: false, reason: 'parse_error' }
+    return { ok: false, reason: QuarantineReason.PARSE_ERROR }
   }
 }

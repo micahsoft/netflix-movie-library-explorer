@@ -1,20 +1,13 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql'
+import { MovieSortField, SortDirection, MovieSort } from '@movie-explorer/types'
 
-export enum MovieSortField {
-  RATING = 'RATING',
-  YEAR = 'YEAR',
-  TITLE = 'TITLE',
-}
+export { MovieSortField, SortDirection }
+
 registerEnumType(MovieSortField, { name: 'MovieSortField' })
-
-export enum SortDirection {
-  ASC = 'ASC',
-  DESC = 'DESC',
-}
 registerEnumType(SortDirection, { name: 'SortDirection' })
 
 @InputType()
-export class MovieSortInput {
+export class MovieSortInput implements MovieSort {
   @Field(() => MovieSortField)
   field!: MovieSortField
 
