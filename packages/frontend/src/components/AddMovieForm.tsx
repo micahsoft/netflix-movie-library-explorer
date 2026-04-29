@@ -29,9 +29,13 @@ export function AddMovieForm() {
     if (form.year.trim()) input.year = parseInt(form.year, 10)
     if (form.description.trim()) input.description = form.description.trim()
 
-    await addMovie({ variables: { input } })
-    setSuccess(`"${form.title}" added successfully.`)
-    setForm({ title: '', rating: '', genres: '', year: '', description: '' })
+    try {
+      await addMovie({ variables: { input } })
+      setSuccess(`"${form.title}" added successfully.`)
+      setForm({ title: '', rating: '', genres: '', year: '', description: '' })
+    } catch {
+      // error is captured by Apollo's useMutation error state and displayed below
+    }
   }
 
   const set = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>

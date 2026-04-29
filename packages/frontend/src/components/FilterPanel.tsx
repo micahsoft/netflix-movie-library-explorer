@@ -8,7 +8,7 @@ export function FilterPanel() {
   const [genre, setGenre] = useState('')
   const [minRating, setMinRating] = useState('')
   const [year, setYear] = useState('')
-  const [filter, { data, loading }] = useLazyQuery(SEARCH_MOVIES)
+  const [filter, { data, loading, error }] = useLazyQuery(SEARCH_MOVIES)
 
   const handleApply = (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,6 +55,7 @@ export function FilterPanel() {
           {loading ? 'Filtering…' : 'Apply Filters'}
         </button>
       </form>
+      {error && <p className="error-msg">Filter failed: {error.message}</p>}
       {data && (
         <div className="search-results">
           <p className="results-count">{data.movies.total} results</p>

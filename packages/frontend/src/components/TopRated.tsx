@@ -6,7 +6,7 @@ import { Movie } from '@movie-explorer/types'
 
 export function TopRated() {
   const [visible, setVisible] = useState(false)
-  const [fetch, { data, loading }] = useLazyQuery(GET_TOP_RATED, {
+  const [fetch, { data, loading, error }] = useLazyQuery(GET_TOP_RATED, {
     variables: { limit: 10 },
     fetchPolicy: 'network-only',
   })
@@ -24,6 +24,7 @@ export function TopRated() {
           {loading ? 'Loading…' : 'Show Top 10'}
         </button>
       </div>
+      {error && <p className="error-msg">Failed to load: {error.message}</p>}
       {visible && data && (
         <div className="movie-list">
           {data.topRated.map((m: Movie, i: number) => (
