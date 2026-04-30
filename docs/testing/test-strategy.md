@@ -100,14 +100,4 @@ const module = await Test.createTestingModule({
 ```bash
 # All tests
 pnpm test
-
-# Watch mode
-pnpm test:watch
-
-# Coverage
-pnpm test:cov
 ```
-
-Coverage targets (enforced in CI if configured):
-- Normalizer: 100% — adversarial input, no room for surprise
-- CatalogService: 90%+ — all aggregate operations covered
