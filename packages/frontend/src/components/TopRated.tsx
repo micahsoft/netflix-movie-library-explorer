@@ -1,31 +1,25 @@
-import React, { useState } from 'react'
-import { useLazyQuery } from '@apollo/client'
+import React from 'react'
+import { useQuery } from '@apollo/client'
 import { GET_TOP_RATED } from '../graphql/queries'
 import { MovieCard } from './MovieCard'
 import { Movie } from '@movie-explorer/types'
 
 export function TopRated() {
-  const [visible, setVisible] = useState(false)
-  const [fetch, { data, loading, error }] = useLazyQuery(GET_TOP_RATED, {
+  const { data, loading, error, refetch } = useQuery(GET_TOP_RATED, {
     variables: { pagination: { limit: 10 } },
     fetchPolicy: 'network-only',
   })
-
-  const handleClick = () => {
-    fetch()
-    setVisible(true)
-  }
 
   return (
     <div className="panel">
       <div className="panel-header">
         <h2>Top Rated</h2>
-        <button className="btn-primary" onClick={handleClick} disabled={loading}>
-          {loading ? 'Loading…' : 'Show Top 10'}
+        <button className="btn-primary" onClick={() => refetch()} disabled={loading}>
+          {loading ? 'Loading…' : 'Refresh'}
         </button>
       </div>
       {error && <p className="error-msg">Failed to load: {error.message}</p>}
-      {visible && data && (
+      {data && (
         <div className="movie-list">
           {data.topRated.map((m: Movie, i: number) => (
             <div key={m.id} className="ranked-item">
