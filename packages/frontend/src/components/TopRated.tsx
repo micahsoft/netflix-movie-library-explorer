@@ -7,7 +7,7 @@ import { Movie } from '@movie-explorer/types'
 export function TopRated() {
   const [visible, setVisible] = useState(false)
   const [fetch, { data, loading, error }] = useLazyQuery(GET_TOP_RATED, {
-    variables: { limit: 10 },
+    variables: { pagination: { limit: 10 } },
     fetchPolicy: 'network-only',
   })
 

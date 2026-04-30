@@ -34,8 +34,8 @@ export const GET_STATS = gql`
 `
 
 export const GET_TOP_RATED = gql`
-  query GetTopRated($limit: Int) {
-    topRated(limit: $limit) {
+  query GetTopRated($pagination: PaginationInput) {
+    topRated(pagination: $pagination) {
       ...MovieFields
     }
   }
@@ -43,8 +43,8 @@ export const GET_TOP_RATED = gql`
 `
 
 export const SEARCH_MOVIES = gql`
-  query SearchMovies($filter: MovieFilter, $limit: Int, $offset: Int) {
-    movies(filter: $filter, limit: $limit, offset: $offset) {
+  query SearchMovies($filter: MovieFilter, $pagination: PaginationInput) {
+    movies(filter: $filter, pagination: $pagination) {
       items {
         ...MovieFields
       }

@@ -18,7 +18,7 @@ export function SearchBar({ onQueryChange }: SearchBarProps) {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     if (!query.trim()) return
     debounceRef.current = setTimeout(() => {
-      search({ variables: { filter: { q: query }, limit: 20 } })
+      search({ variables: { filter: { q: query }, pagination: { limit: 20 } } })
     }, 300)
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [query])
