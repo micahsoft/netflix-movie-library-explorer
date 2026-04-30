@@ -94,6 +94,31 @@ describe('IngestionService', () => {
     expect(movies[0].source).toBe(MovieSource.DRIVE)
   })
 
+  it('merges genres when same title and year appear in multiple files', async () => {
+    mockDrive.setFiles([
+      { ref: ref('f1', ['Drama', '2021']), content: { title: 'Inkbound', rating: 8.2 } },
+      { ref: ref('f2', ['Fantasy', '2021']), content: { title: 'Inkbound', rating: 8.2 } },
+    ])
+
+    const { movies } = await svc.ingest()
+
+    expect(movies).toHaveLength(1)
+    expect(movies[0].title).toBe('Inkbound')
+    expect(movies[0].genres).toContain('Drama')
+    expect(movies[0].genres).toContain('Fantasy')
+  })
+
+  it('keeps distinct movies with the same title but different years', async () => {
+    mockDrive.setFiles([
+      { ref: ref('f1'), content: { title: 'The Fly', rating: 7.5, year: 1958 } },
+      { ref: ref('f2'), content: { title: 'The Fly', rating: 7.9, year: 1986 } },
+    ])
+
+    const { movies } = await svc.ingest()
+
+    expect(movies).toHaveLength(2)
+  })
+
   it('returns empty result when crawl finds no files', async () => {
     mockDrive.setFiles([])
 

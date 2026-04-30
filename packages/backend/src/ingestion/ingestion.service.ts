@@ -88,15 +88,39 @@ export class IngestionService {
       }
     }
 
+    const deduped = this.deduplicateByTitleAndYear(movies)
+    const mergedCount = movies.length - deduped.length
+    if (mergedCount > 0) {
+      this.logger.log(`Deduplication merged ${mergedCount} duplicate entries`)
+    }
+
     const summary = this.quarantineLog.getSummary()
     this.logger.log(
-      `Ingestion complete — ${movies.length} indexed / ${quarantinedCount} quarantined`,
+      `Ingestion complete — ${deduped.length} indexed / ${quarantinedCount} quarantined`,
     )
     if (quarantinedCount > 0) {
       const breakdown = summary.byReason.map((r) => `${r.reason}: ${r.count}`).join(', ')
       this.logger.warn(`Quarantine breakdown — ${breakdown}`)
     }
 
-    return { movies, quarantinedCount }
+    return { movies: deduped, quarantinedCount }
+  }
+
+  private deduplicateByTitleAndYear(movies: Movie[]): Movie[] {
+    const seen = new Map<string, Movie>()
+
+    for (const movie of movies) {
+      const key = `${movie.title.toLowerCase().trim()}|${movie.year ?? 'null'}`
+      const existing = seen.get(key)
+
+      if (existing) {
+        const mergedGenres = [...new Set([...existing.genres, ...movie.genres])]
+        seen.set(key, { ...existing, genres: mergedGenres })
+      } else {
+        seen.set(key, movie)
+      }
+    }
+
+    return [...seen.values()]
   }
 }
