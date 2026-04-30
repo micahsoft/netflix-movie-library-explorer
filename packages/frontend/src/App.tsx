@@ -6,6 +6,7 @@ import { MoviesByYear } from './components/MoviesByYear'
 import { AddMovieForm } from './components/AddMovieForm'
 import { FilterPanel } from './components/FilterPanel'
 import { QuarantinePanel } from './components/QuarantinePanel'
+import { StartupGate } from './components/StartupGate'
 
 type Tab = 'overview' | 'top-rated' | 'by-year' | 'add' | 'filter' | 'quarantine'
 
@@ -23,6 +24,7 @@ export default function App() {
   const [searching, setSearching] = useState(false)
 
   return (
+    <StartupGate>
     <div className="app">
       <header className="app-header">
         <div className="header-brand">
@@ -53,5 +55,6 @@ export default function App() {
         {tab === 'quarantine' && <QuarantinePanel />}
       </main>
     </div>
+    </StartupGate>
   )
 }
