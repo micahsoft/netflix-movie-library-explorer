@@ -1,7 +1,7 @@
 # Netflix Movie Library Explorer
 
 A full-stack application for ingesting, exploring, and querying movie metadata
-from a Google Drive folder. Built for the Netflix NTech SWE Technical Assessment.
+from a Google Drive folder.
 
 ## Project Structure
 
