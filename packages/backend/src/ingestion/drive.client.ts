@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { google } from 'googleapis'
-import { GoogleAuthService } from './google-auth.service'
+import { GoogleAuthService } from '../auth/google-auth.service'
 
 export interface DriveFileRef {
   fileId: string

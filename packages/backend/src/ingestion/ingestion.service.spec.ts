@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing'
 import { IngestionService } from './ingestion.service'
 import { QuarantineLog } from './quarantine-log'
-import { DriveClient, DriveFileRef } from '../auth/drive.client'
+import { DriveClient, DriveFileRef } from './drive.client'
 import { QuarantineReason } from './normalizer'
 import { MovieSource } from '@movie-explorer/types'
 

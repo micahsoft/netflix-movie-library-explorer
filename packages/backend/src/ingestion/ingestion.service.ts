@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Movie } from '@movie-explorer/types'
-import { DriveClient } from '../auth/drive.client'
+import { DriveClient } from './drive.client'
 import { normalize, QuarantineReason } from './normalizer'
 import { QuarantineLog } from './quarantine-log'
 import { SEED_MOVIES } from './seed-data'
